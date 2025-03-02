@@ -11,12 +11,12 @@ export const Header = () => {
       </div>
       <ul className="headMenu">
         <li>
-          <Link href="#">Procurement</Link>
+          <Link href="/procurement">Procurement</Link>
         </li>
         <li>
           <Link href="/SustainableCoach">Sustainable Coach</Link>
         </li>
-        </ul>
+      </ul>
     </header>
   );
 }
