@@ -49,17 +49,43 @@ export default function ProcurementPage() {
       }
 
       if (items.length > 0) {
-        const firstItem = items[0];
-        const generatedColumns = Object.keys(firstItem).map((key) => ({
-          field: key,
-          headerName: key,
-          width: 150,
+        const mappedRows = items.map((item, idx) => ({
+          id: idx + 1,
+          product: item.matchedItem,
+          functionalUnit: item.quantity,
+          globalFootprintPerUnit: Number(item.matchedItemCarbonFootprint.toFixed(3)),
+          totalGlobalFootprint: Number(item.totalMatchedItemCarbonFootprint.toFixed(3)),
+          totalPrice: Number(item.totalPrice.toFixed(3)),
         }));
 
-        const mappedRows = items.map((obj, idx) => ({
-          id: idx + 1,
-          ...obj,
-        }));
+        const generatedColumns = [
+          { field: "product", headerName: "Item Name", width: 300 },
+          { field: "functionalUnit", headerName: "Unit", width: 150 },
+          {
+            field: "globalFootprintPerUnit",
+            headerName: "Carbon Footprint per Unit",
+            width: 200,
+            renderCell: (params) => (
+              <span>{params.value.toFixed(2)} KgCO<sub>2</sub>e</span>
+            ),
+          },
+          {
+            field: "totalGlobalFootprint",
+            headerName: "Total Carbon Footprint",
+            width: 200,
+            renderCell: (params) => (
+              <span>{params.value.toFixed(2)} KgCO<sub>2</sub>e</span>
+            ),
+          },
+          {
+            field: "totalPrice",
+            headerName: "Price",
+            width: 150,
+            renderCell: (params) => (
+              <span>${params.value.toFixed(2)}</span>
+            ),
+          },
+        ];
 
         setRows(mappedRows);
         setColumns(generatedColumns);
@@ -104,7 +130,7 @@ export default function ProcurementPage() {
         <div className="loading-container">
           <CircularProgress />
           <p style={{ marginTop: "1em" }}>
-            Processing your file. This may take up to 5 minutes...
+            Processing your file. This may take up to a minute...
           </p>
         </div>
       )}
